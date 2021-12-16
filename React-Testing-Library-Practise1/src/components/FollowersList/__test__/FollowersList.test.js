@@ -12,6 +12,22 @@ const MockFollowersList = () => {
 
 describe("FollowersList tests", () => {
 
+    beforeEach(() => {
+        console.log("RUNNING BEFORE EACH TEST")
+    })
+
+    beforeAll(() => {
+        console.log("RAN ONCE BEFORE ALL TESTS")
+    })
+
+    afterEach(() => {
+        console.log("RUNNING AFTER TEST")
+    })
+
+    afterAll(() => {
+        console.log("RAN ONCE AFTER ALL TESTS")
+    })
+
     test('should render first item in followers list', async () => {
         render(
             <MockFollowersList />
