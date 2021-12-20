@@ -1,7 +1,20 @@
 import React from 'react';
 import Counter from '../Counter';
-import {screen, render, fireEvent} from '@testing-library/react';
+import {screen, render, fireEvent, cleanup} from '@testing-library/react';
 import "@testing-library/jest-dom/extend-expect"
+
+beforeEach(() => {
+    console.log("this code runs before each test")
+})
+
+afterEach(() => {
+    cleanup() // cleans all DOMs
+    console.log("this code runs after each test")
+})
+
+afterAll(() => {
+    console.log("this code runs after all test are ran")
+})
 
 test("header renders correct text", () => {
     const component = render(<Counter />);
@@ -108,4 +121,82 @@ test("changing input value then clicking on sub btn works correctly", () => {
 
     fireEvent.click(subBtnEl);
     expect(counterEl.textContent).toBe("-5")
+})
+
+test("adding and subtracting leads to the correct counter number", () => {
+    render(<Counter />);
+    const subBtnEl = screen.getByTestId("sub-btn");
+    const addBtnEl = screen.getByTestId("add-btn");
+    const counterEl = screen.getByTestId("counter");
+    const inputEl = screen.getByTestId("input");
+
+    fireEvent.change(inputEl, {
+        target: {
+            value: "10"
+        }
+    })
+    fireEvent.click(addBtnEl)
+    fireEvent.click(addBtnEl)
+    fireEvent.click(addBtnEl)
+    fireEvent.click(addBtnEl)
+
+    fireEvent.click(subBtnEl)
+    fireEvent.click(subBtnEl)
+
+    expect(counterEl.textContent).toBe("20");
+
+    fireEvent.change(inputEl, {
+        target: {
+            value: "5"
+        }
+    })
+
+    fireEvent.click(addBtnEl)
+
+    fireEvent.click(subBtnEl)
+    fireEvent.click(subBtnEl)
+
+    expect(counterEl.textContent).toBe("15")
+})
+
+test("counter changes color correctly", () => {
+    render(<Counter />);
+    const counterEl = screen.getByTestId("counter");
+    const inputEl = screen.getByTestId("input");
+    const addBtnEl = screen.getByTestId("add-btn")
+    const subBtnEl = screen.getByTestId("sub-btn")
+
+    expect(counterEl.className).toBe("");
+
+    fireEvent.change(inputEl, {
+        target: {
+            value: "50"
+        }
+    })
+
+    fireEvent.click(addBtnEl);
+
+    expect(counterEl.className).toBe("");
+
+    fireEvent.click(addBtnEl);
+
+    expect(counterEl.className).toBe("green");
+    
+    fireEvent.click(addBtnEl);
+
+    expect(counterEl.className).toBe("green");
+
+    fireEvent.click(subBtnEl);
+    fireEvent.click(subBtnEl);
+
+    expect(counterEl.className).toBe("");
+
+    fireEvent.click(subBtnEl);
+    fireEvent.click(subBtnEl);
+    fireEvent.click(subBtnEl);
+    fireEvent.click(subBtnEl);
+
+    expect(counterEl.className).toBe("red");
+
+
 })
