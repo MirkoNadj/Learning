@@ -14,6 +14,13 @@ describe("<Display />", () => {
     })
 
     it("props work", () => {
+        const balls = 3, strikes = 2;
+        const display = render(<Display strikes={strikes} balls={balls} />);
+        display.getByText(new RegExp(`Strikes: ${strikes}`, 'i'));
+        display.getByText(new RegExp(`Balls: ${balls}`, 'i'));
+    })
+
+    it("props work", () => {
         const display = render(<Display strikes={1} balls={2} />);
         display.getByText(/Strikes: 1/);
         display.getByText(/Balls: 2/);
